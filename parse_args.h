@@ -3,7 +3,7 @@
 
 #include "structures.h"
 
-void parse_args ( int argc, char * argv[], run_mode_t * rm );
+int parse_args ( int argc, char * argv[], run_mode_t * rm );
   
 
 #endif

@@ -13,11 +13,12 @@ static char * rm_names[] = {
 
 int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
   
-  rm -> client_run_mode = defualt_client_run_mode;
+  /* rm -> client_run_mode = defualt_client_run_mode;
   rm -> frequency = default_frequency;
   rm -> thread_amount = default_thread_amount;
   rm -> reporting_timeout = default_reporting_timeout;
-  rm -> ip_addr = default_ip;
+  //  rm -> ip_addr = default_ip;
+  strcpy ( rm -> ip_addr, default_ip );
   rm -> port = default_port;
   int res = 0;
   
@@ -74,7 +75,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
 	  if (strcasecmp (optarg, rm_names[i]))
 	    break;
       if (i >= sizeof (rm_names) / sizeof (rm_names[0]))
-	rm -> ip_addr = CM_CLIENT;
+	strcpy (rm -> ip_addr, CM_CLIENT);
         break;
     }
     case 'p':{
@@ -98,5 +99,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
     }
    }
   }
+
+  */
   return 0;
 }
