@@ -23,6 +23,15 @@ void init_sleep_time ( struct timespec * t,  int freq ) {
   t -> tv_nsec = (int) 1E9 / freq;  
 }
 
+int update_statistic ( statistic_t * stat ) {
+
+  pthread_mutex_lock ( &stat -> mutex );
+  stat -> counter += 1;
+  pthread_mutex_unlock ( &stat -> mutex );
+
+  return 0;
+}
+
 void * client ( void * arg ) {
 
   client_task_t * task = arg;
@@ -55,7 +64,8 @@ void * client ( void * arg ) {
     if ( recv_idx != send_idx )
       break;
 
-    send_idx += 1;    
+    send_idx += 1;
+    update_statistic ( &task -> statistic );
   }
 
   return NULL;
