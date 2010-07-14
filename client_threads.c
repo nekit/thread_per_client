@@ -20,10 +20,12 @@ inline int value_of_packet ( packet_t * p ) {
 
 void init_sleep_time ( struct timespec * t,  int freq ) {
 
-  t -> tv_nsec = (int) 1E9 / freq;  
+  t -> tv_nsec = (int) 1E9 / freq;
+  t -> tv_sec = 0;
 }
 
-int update_statistic ( statistic_t * stat ) {
+
+inline int update_statistic ( statistic_t * stat ) {
 
   pthread_mutex_lock ( &stat -> mutex );
   stat -> counter += 1;
@@ -31,6 +33,7 @@ int update_statistic ( statistic_t * stat ) {
 
   return 0;
 }
+
 
 void * client ( void * arg ) {
 
