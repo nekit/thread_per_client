@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 
-void * norm_client ( void * arg ) {
+void * client ( void * arg ) {
 
   client_task_t * task = arg;
   int sock = connect_to_server ( inet_addr ( task -> ip_addr ), htons ( task -> port ) );

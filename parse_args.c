@@ -13,12 +13,11 @@ static char * rm_names[] = {
 
 int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
   
-  /* rm -> client_run_mode = defualt_client_run_mode;
+  rm -> client_run_mode = defualt_client_run_mode;
   rm -> frequency = default_frequency;
   rm -> thread_amount = default_thread_amount;
   rm -> reporting_timeout = default_reporting_timeout;
-  //  rm -> ip_addr = default_ip;
-  strcpy ( rm -> ip_addr, default_ip );
+  strcpy(rm -> ip_addr , default_ip);
   rm -> port = default_port;
   int res = 0;
   
@@ -35,60 +34,46 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
       break;
     }
     case 'f': {
-      int i;
-      for (i = 0; i < sizeof (rm_names) / sizeof (rm_names[0]); ++i)
-	if (rm_names[i] != 0)
-	  if (strcasecmp (optarg, rm_names[i]))
-	    break;
-      if (i >= sizeof (rm_names) / sizeof (rm_names[0]))
-	rm -> frequency = CM_CLIENT;
+      if (0 <= atoi(optarg))
+	rm -> frequency = atoi(optarg);
+      else{
+	printf("wrong frequency \n");
+	return  1;
+      }
       break;
     }
     case 'n':{
-      int i;
-     for (i = 0; i < sizeof (rm_names) / sizeof (rm_names[0]); ++i)
-	if (rm_names[i] != 0)
-	  if (strcasecmp (optarg, rm_names[i]))
-	    break;
-      if (i >= sizeof (rm_names) / sizeof (rm_names[0]))
-	rm -> thread_amount = CM_CLIENT;
+      if (0 <  atoi(optarg)){
+	rm -> thread_amount = atoi(optarg);
+	//	printf("%d \n", rm -> thread_amount);
+      }
+      else{
+	printf("wrong thread amount \n");
+	return  1;
+      }
       break;
     }
     case 't':{
-      int i;
-      for (i = 0; i < sizeof (rm_names) / sizeof (rm_names[0]); ++i)
-	if (rm_names[i] != 0)
-	  if (strcasecmp (optarg, rm_names[i]))
-	    break;
-      if (i >= sizeof (rm_names) / sizeof (rm_names[0]))
-	rm -> reporting_timeout = CM_CLIENT;
+      if (0 <= atoi(optarg) ){
+	rm -> reporting_timeout = atoi(optarg);
+	//	printf("%d \n", rm -> reporting_timeout);
+      }
       else{
-	printf("wrong parametr \n");
+	printf("wrong timeout \n");
 	return 1;
       }
       break;
     }
     case 's':{
-      int i;
-       for (i = 0; i < sizeof (rm_names) / sizeof (rm_names[0]); ++i)
-	if (rm_names[i] != 0)
-	  if (strcasecmp (optarg, rm_names[i]))
-	    break;
-      if (i >= sizeof (rm_names) / sizeof (rm_names[0]))
-	strcpy (rm -> ip_addr, CM_CLIENT);
+      stpcpy(rm -> ip_addr, optarg);
+      printf("%s \n", rm -> ip_addr);
         break;
     }
     case 'p':{
-      int i;
-      for (i = 0; i < sizeof (rm_names) / sizeof (rm_names[0]); ++i)
-	if (rm_names[i] != 0)
-	  if (strcasecmp (optarg, rm_names[i]))
-	    break;
-      if (i >= sizeof (rm_names) / sizeof (rm_names[0]))
-	rm -> port = CM_CLIENT;
-    
+      if (0 < atoi(optarg))
+	rm -> port = atoi(optarg);
       else{
-	printf("wrong parametr \n");
+	printf("wrong port \n");
 	return 1;
       }
       break;
@@ -99,7 +84,5 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
     }
    }
   }
-
-  */
   return 0;
 }
