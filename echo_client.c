@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "structures.h"
 #include "parse_args.h"
 #include "client.h"
 #include "logging.h"
 
 int main ( int argc, char * argv[] ) {
+
+  signal ( SIGPIPE, SIG_IGN );
   
   run_mode_t rm;  
   if ( 0 != parse_args ( argc, argv, &rm ) ) {

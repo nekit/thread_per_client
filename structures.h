@@ -5,7 +5,7 @@
 #include <pthread.h>
 #include "logging.h"
 
-#define default_ip  "92.168.1.1"
+#define default_ip  "127.0.0.1"
 #define default_port 8080
 #define default_thread_amount 10
 #define default_reporting_timeout 100
