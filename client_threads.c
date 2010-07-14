@@ -38,6 +38,9 @@ inline int update_statistic ( statistic_t * stat ) {
 void * client ( void * arg ) {
 
   client_task_t * task = arg;
+
+  to_log ( "thread started", LL_DEBUG, task -> log_level );
+  
   int sock = connect_to_server ( inet_addr ( task -> ip_addr ), htons ( task -> port ) );
 
   uint32_t send_idx = 0;

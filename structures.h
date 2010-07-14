@@ -62,6 +62,7 @@ typedef struct client_task_s {
   int port;
   char ip_addr[ IP_ADDRES_SIZE ];
   statistic_t statistic;
+  int log_level;
   
 } client_task_t; 
 

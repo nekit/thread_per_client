@@ -10,6 +10,7 @@ int make_client_task ( run_mode_t * rm, client_task_t * ct ) {
   memset ( ct, 0, sizeof (ct) );
   ct -> frequency = rm -> frequency;
   ct -> port = rm -> port;
+  ct -> log_level = rm -> log_level;
   memcpy( ct -> ip_addr, rm -> ip_addr, sizeof (rm -> ip_addr) );
 
   ct -> statistic.counter = 0;
@@ -23,6 +24,8 @@ int make_client_task ( run_mode_t * rm, client_task_t * ct ) {
 }
 
 int run_client ( run_mode_t run_mode ) {
+
+  to_log ( "client start", LL_INFO, run_mode.log_level );
 
   pthread_t thread[run_mode.thread_amount];
   client_task_t client_task;
@@ -41,7 +44,9 @@ int run_client ( run_mode_t run_mode ) {
     }
 
   for ( i = 0; i < run_mode.thread_amount; ++i )
-    pthread_join ( thread[i], NULL );  
+    pthread_join ( thread[i], NULL );
+
+  to_log ( "client finish", LL_INFO, run_mode.log_level );
 
   return 0;
 }
