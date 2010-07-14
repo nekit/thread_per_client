@@ -1,5 +1,5 @@
 echo_client := echo_client
-echo_client_list := echo_client.o parse_args.o normal_client.o client_threads.o socket_operations.o
+echo_client_list := echo_client.o parse_args.o client.o client_threads.o socket_operations.o
 
 CFLAGS += -O2 -Wall
 LDFLAGS += -lpthread

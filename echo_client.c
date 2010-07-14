@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "structures.h"
 #include "parse_args.h"
-#include "normal_client.h"
+#include "client.h"
 
 int main ( int argc, char * argv[] ) {
 
