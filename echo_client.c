@@ -6,7 +6,7 @@
 int main ( int argc, char * argv[] ) {
 
 // this is a comment
-// yet another comment
+// yet another comment  
 
   return 0;
 }
