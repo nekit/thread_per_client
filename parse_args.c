@@ -23,7 +23,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
   
   int res = 0;
   
-  while ( (res = getopt(argc,argv,"m:f:n:t:s:p:")) != -1) {
+  while ( (res = getopt(argc,argv,"m:f:n:t:s:p:h")) != -1) {
     switch (res){
     case 'm': {
       int i;
@@ -33,6 +33,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
 	    break;
       if (i >= sizeof (rm_names) / sizeof (rm_names[0]))
 	rm -> client_run_mode = CM_CLIENT;
+      to_log (" parse mode done ", LL_DEBUG, rm -> log_level);
       break;
     }
     case 'f': {
@@ -42,6 +43,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
 	printf("wrong frequency \n");
 	return  1;
       }
+      to_log (" parse frequency done ", LL_DEBUG, rm -> log_level);
       break;
     }
     case 'n':{
@@ -53,6 +55,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
 	printf("wrong thread amount \n");
 	return  1;
       }
+      to_log (" parse thread amount done ", LL_DEBUG, rm -> log_level);
       break;
     }
     case 't':{
@@ -78,9 +81,10 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
 	printf("wrong port \n");
 	return 1;
       }
+      to_log (" parse ip done ", LL_DEBUG, rm -> log_level);
       break;
     }
-    case '?':{
+    case 'h':{
       printf ( "reqiers arguments:\n -m: mode: 1-client  2-flood client\n -f: frequency\n -n: amount of threads\n -t: sleep time in milliseconds\n -s: ip-address\n -p: port\n");
       return 1;
     }
