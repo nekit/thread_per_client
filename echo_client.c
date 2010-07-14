@@ -10,8 +10,6 @@ int main ( int argc, char * argv[] ) {
     printf("parse argument exception");
     return (EXIT_FAILURE);
   }
-  // 1 == rm.client_run_mode ? run_client(rm) : run_flood_client(rm);
   
   return (EXIT_SUCCESS);
-
 }

@@ -3,12 +3,16 @@
 
 #include <stdint.h>
 #include <pthread.h>
+#include "logging.h"
+
 #define default_ip  "92.168.1.1"
 #define default_port 8080
 #define default_thread_amount 10
 #define default_reporting_timeout 100
-#define defualt_client_run_mode 1
+#define defualt_client_run_mode CM_CLIENT
 #define default_frequency 100
+#define default_log_level LL_DEBUG
+
 #define IP_ADDRES_SIZE 20
 #define PACKET_SIZE sizeof ( uint32_t )
 
@@ -21,7 +25,6 @@ typedef enum {
   CM_LAST,
   
 } client_mode_t;
-
 
 typedef struct run_mode_s {
 
@@ -36,6 +39,8 @@ typedef struct run_mode_s {
 
   // reporting timeout in milliseconds
   int reporting_timeout;
+
+  int log_level;
   
   int port;
 

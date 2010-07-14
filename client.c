@@ -7,7 +7,6 @@ int make_client_task ( run_mode_t * rm, client_task_t * ct ) {
 
   memset ( ct, 0, sizeof (ct) );
   ct -> frequency = rm -> frequency;
-  //ct -> reporting_timeout = rm -> reporting_timeout;
   ct -> port = rm -> port;
   memcpy( ct -> ip_addr, rm -> ip_addr, sizeof (rm -> ip_addr) );
 
@@ -16,10 +15,10 @@ int make_client_task ( run_mode_t * rm, client_task_t * ct ) {
 
 int run_client ( run_mode_t run_mode ) {
 
-  pthread_t thread[run_mode.thread_amount];
+  /*pthread_t thread[run_mode.thread_amount];
   client_task_t client_task;
   make_client_task ( &run_mode, &client_task );
-  
+  */
 
 
   return 0;

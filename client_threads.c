@@ -24,6 +24,7 @@ void init_sleep_time ( struct timespec * t,  int freq ) {
   t -> tv_sec = 0;
 }
 
+
 inline int update_statistic ( statistic_t * stat ) {
 
   pthread_mutex_lock ( &stat -> mutex );
