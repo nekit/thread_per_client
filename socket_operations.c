@@ -4,23 +4,42 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <memory.h>
+#include "logging.h"
 
-void make_reusable ( int sock ) {
+#define SOCKET_OP_LOG_LEVEL 0
+
+int make_reusable ( int sock ) {
 
   // call before bind()
+
+   to_log ( "making socket reusable", LL_DEBUG, SOCKET_OP_LOG_LEVEL );
   
   int reuse_val = 1;
-  if ( setsockopt ( sock, SOL_SOCKET, SO_REUSEADDR, &reuse_val, sizeof ( reuse_val ) ) == -1 )
-    handle_error ( "reuse problem" );
+  if ( setsockopt ( sock, SOL_SOCKET, SO_REUSEADDR, &reuse_val, sizeof ( reuse_val ) ) == -1 ) {
+
+    to_log ( "reuse problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    return 1;
+  }
+  
+  return 0;
 }
 
 int bind_socket ( uint32_t listn_ip, uint16_t port, int listn_backlog ) {
 
-  int sock = socket ( PF_INET, SOCK_STREAM, 0 );
-  if ( -1 == sock )
-    handle_error ( "socket problem" );
+  to_log ( "binding socket", LL_DEBUG, SOCKET_OP_LOG_LEVEL );
 
-  make_reusable ( sock );
+  int sock = socket ( PF_INET, SOCK_STREAM, 0 );
+  if ( -1 == sock ) {    
+
+    to_log ( "socket problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    return -1;
+  }
+
+  if ( 0 != make_reusable ( sock ) ){
+    
+    to_log ( "make reuse problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    return -1;
+  }
   
   struct sockaddr_in serv_addr;
   memset ( &serv_addr, 0, sizeof ( struct sockaddr_in ) );
@@ -28,90 +47,56 @@ int bind_socket ( uint32_t listn_ip, uint16_t port, int listn_backlog ) {
   serv_addr.sin_port = port;
   serv_addr.sin_addr.s_addr = listn_ip;
 
-  if ( -1 == bind ( sock, (struct sockaddr *) &serv_addr, sizeof( struct sockaddr_in) ) )
-    handle_error ( "bind problem" );
+  if ( -1 == bind ( sock, (struct sockaddr *) &serv_addr, sizeof( struct sockaddr_in) ) ) {
 
-  if ( -1 == listen ( sock, listn_backlog ) )
-    handle_error ( "listen backlog problem" );
+    to_log ( "bind problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    return -1;
+  }
 
+  if ( -1 == listen ( sock, listn_backlog ) ) {
+    
+    to_log ( "listen problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    return -1;
+  }
 
-#ifdef DEBUG
-  printf ( "connection socket ready\n" );
-#endif
+  to_log ( "bind success", LL_DEBUG, SOCKET_OP_LOG_LEVEL );
 
   return sock;
 }
 
 int connect_to_server ( uint32_t server_ip, uint16_t port ) {
 
+  to_log ( "connecting to server", LL_INFO, SOCKET_OP_LOG_LEVEL );
+
   struct sockaddr_in serv_addr;
   int sock = socket ( PF_INET, SOCK_STREAM, 0 );
-  if ( -1 == sock )
-    handle_error ( "socket problem" );
+  
+  if ( -1 == sock ) {    
+
+    to_log ( "socket problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    return -1;
+  }
 
   memset ( &serv_addr, 0, sizeof ( struct sockaddr_in ) );
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_port = port;
   serv_addr.sin_addr.s_addr = server_ip;
 
-#ifdef DEBUG
-  printf ( "connecting to server..." );
-#endif
+  if ( connect ( sock, (struct sockaddr *) &serv_addr, sizeof(struct sockaddr_in) ) == -1 ) {
 
-  if ( connect ( sock, (struct sockaddr *) &serv_addr, sizeof(struct sockaddr_in) ) == -1 )
-    handle_error ( "connection to server failed" );
+    to_log ( "connection to server failed", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    return -1;
+  }   
 
-#ifdef DEBUG
-  printf ( "connected successfully" );
-#endif
-
+  to_log ( "connected successfully", LL_INFO, SOCKET_OP_LOG_LEVEL );
+  
   return sock;
 }
 
-int send_wrap ( int sock, char buf[] ) { 
-
-  int buf_len = strlen ( buf ) + 1;
-  int s_len;
-  s_len = send ( sock, &buf_len, sizeof ( buf_len ), 0 );
-  if ( -1 != s_len )
-    s_len = send ( sock, buf, buf_len, 0 );
-
-#ifdef DEBUG
-  if ( s_len != -1 ) {
-    printf ( "message send on socket %d\n", sock );
-    printf ( "message :\n%s\n", buf );
-  }  
-#endif
-  
-  return s_len;
-}
-
-int recv_wrap ( int sock, char ** buf ) {
-
-  int rcv_len;
-  int buf_len;
-
-  rcv_len = recv ( sock, &buf_len, sizeof ( buf_len ), 0 );
-  if ( 0 == rcv_len )
-    return rcv_len;
-
-  *buf = malloc ( buf_len * sizeof ( char ) );
-  rcv_len = recv ( sock, *buf, buf_len, 0 );
-
-  if ( 0 == rcv_len ) {
-    free ( *buf );
-    *buf = NULL;
-  }
-
-#ifdef DEBUG
-  if ( rcv_len != 0 )
-    printf ( "recieved message:\n%s\n", *buf );
-#endif
-
-  return rcv_len;
-}
-
 int accept_wrap ( int sock ) {
+
+  // ???
+  to_log ( "accepting", LL_DEBUG, SOCKET_OP_LOG_LEVEL );
 
   static struct sockaddr_in clnt_addr;
   static socklen_t sock_len;
