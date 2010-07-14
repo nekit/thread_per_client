@@ -11,6 +11,7 @@
 #define default_frequency 100
 #define IP_ADDRES_SIZE 20
 #define PACKET_SIZE sizeof ( uint32_t )
+
 typedef char packet_t[ PACKET_SIZE ];
 
 typedef enum {
