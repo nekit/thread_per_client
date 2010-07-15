@@ -22,7 +22,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
   
   int res = 0;
   
-  while ( (res = getopt(argc,argv,"m:f:n:t:s:p:h")) != -1) {
+  while ( (res = getopt(argc,argv,"m:f:n:t:s:p:h:L:")) != -1) {
     switch (res){
     case 'm': {
       int i;
@@ -87,7 +87,11 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
       printf ( "reqiers arguments:\n -m: mode: 1-client  2-flood client\n -f: frequency\n -n: amount of threads\n -t: sleep time in milliseconds\n -s: ip-address\n -p: port\n");
       return 1;
     }
-   }
+    case 'L' :
+      TRACE_MSG( "parsing level %s\n", optarg );
+      INIT_LOG_LEVEL( optarg );
+      break;
+    }
   }
   return 0;
 }

@@ -20,7 +20,7 @@ void log_message ( const char * file, const char * function, int line, mlog_leve
   if ( NULL == file ) {
     
     current_log_level = log_level;
-    DEBUG_MSG ("current log level: %d\n", current_log_level );
+    INFO_MSG ("current log level: %d\n", current_log_level );
     return;
   }
 
@@ -48,8 +48,10 @@ void log_message ( const char * file, const char * function, int line, mlog_leve
 // case insensitive
 mlog_level_t get_log_level ( const char * level_str ) {
 
+  TRACE_MSG ( "getting log level %s\n", level_str );  
+
   int i;
-  for ( i = 0; i < sizeof ( log_level_str ) / sizeof (log_level_str[0]); ++i )
+  for ( i = 0; i < (sizeof ( log_level_str ) / sizeof (log_level_str[0])) ; ++i )
     if ( log_level_str[i] && ( 0 == strcasecmp( log_level_str[i], level_str ) ) )
       return i;
 

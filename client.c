@@ -25,7 +25,7 @@ int make_client_task ( run_mode_t * rm, client_task_t * ct ) {
 
 int run_client ( run_mode_t run_mode ) {
 
-  INFO_MSG ( "Client starting %d\n", 1 );
+  INFO_MSG ( "Client starting\n" );
 
   pthread_t thread[run_mode.thread_amount];
   client_task_t client_task;
