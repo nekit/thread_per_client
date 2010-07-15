@@ -12,7 +12,7 @@ int main ( int argc, char * argv[] ) {
   
   run_mode_t rm;  
   if ( 0 != parse_args ( argc, argv, &rm ) ) {
-    printf("parse argument exception");
+    printf("parse argument exception \n");
     return (EXIT_FAILURE);
   }
 

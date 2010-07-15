@@ -60,34 +60,43 @@ void * client ( void * arg ) {
   struct timespec remaning_sleep_time;
 
   init_sleep_time ( &sleep_time, task -> frequency );
-
+  
   for ( ; ; ) {
 
     idx_to_packet ( send_idx, &pack );
 
-    to_log ( "send packet", LL_DEBUG, task -> log_level );
-    printf ( "send: %d\n", send_idx  );
+    //to_log ( "send packet", LL_DEBUG, task -> log_level );
+    // printf ( "-> send: %d\n", send_idx  );
     
-    len = send ( sock, &pack, sizeof ( pack ), 0 );
+    len = send ( sock, &send_idx, sizeof ( send_idx ), 0 );
     if ( -1 == len )
       break;
 
     nanosleep ( &sleep_time, &remaning_sleep_time );
-
+    
+    int len_v = sizeof ( packet_t );
+    packet_t packet;
     len = recv ( sock, &pack, sizeof ( pack ), 0 );
-    if ( 0 == len )
-      break;
-
+    printf("%d %d\n",len, value_of_packet( &pack ) );
+    len = 0;
+    int  i = 0, ll = 0;
+    while ( len != len_v){
+      ll = recv ( sock, &recv_idx, sizeof ( recv_idx ), 0 );
+      len += ll;
+      //      memcpy ( &recv_idx, &pack, sizeof ( recv_idx ) );
+      //      idx_to_packet ( send_idx, &pack );
+      printf("i : %d %d  %d\n", ++i, ll, recv_idx);
+    }
+    
     recv_idx = value_of_packet ( &pack );
-
-    printf ( "recv: %d\n", recv_idx);
+    printf ( "-> send: %d recv: %d recv_len: %d\n", send_idx, recv_idx, len);
 
     if ( recv_idx != send_idx ) {
-
       to_log ( "ERROR!!! recv_idx != send_idx", LL_ERROR, task -> log_level );
       break;
     }
-
+    printf("------> %d recv_idx %d\n", send_idx, recv_idx);
+   
     to_log ( "packet recieved", LL_DEBUG, task -> log_level );
 
     send_idx += 1;
