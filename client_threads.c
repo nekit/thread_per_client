@@ -64,7 +64,9 @@ int recv_wrap ( int sock, packet_t * pack  ) {
 
 void * client ( void * arg ) {
 
-  client_task_t * task = arg;  
+  client_task_t * task = arg;
+
+  DEBUG_MSG("connecting to %s port %d\n", task -> ip_addr, task -> port );
   
   int sock = connect_to_server ( inet_addr ( task -> ip_addr ), htons ( task -> port ) );
 
@@ -95,10 +97,7 @@ void * client ( void * arg ) {
       break;
 
     nanosleep ( &sleep_time, &remaning_sleep_time );
-
-
-    // ------------------- recv_wrap
-
+   
     len = recv_wrap ( sock, &pack );
     if ( len <= 0 ) {
 
