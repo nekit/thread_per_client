@@ -10,9 +10,9 @@ void * get_statistics ( void * args ){
   struct timespec timeleft;
   for ( ;; ){
     nanosleep ( &timeout,  &timeleft);
-    to_log (" try to lock and get statistics ", LL_DEBUG, client_task -> log_level);
+    DEBUG_MSG ("statictic thread sleep \n");
     pthread_mutex_lock ( &client_task -> statistic.mutex);
-    to_log (" locked and got statistics ", LL_DEBUG, client_task -> log_level);
+    DEBUG_MSG (" got statistics \n");
     printf("current thread client statistics: %0* \n", client_task -> statistic.counter);
     pthread_mutex_unlock ( &client_task -> statistic.mutex);
   }

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <pthread.h>
-#include "logging.h"
+#include "mega_log.h"
 
 #define default_ip  "127.0.0.1"
 #define default_port 1025

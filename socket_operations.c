@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <memory.h>
-#include "logging.h"
+#include "mega_log.h"
 
 #define SOCKET_OP_LOG_LEVEL 0
 
@@ -12,12 +12,12 @@ int make_reusable ( int sock ) {
 
   // call before bind()
 
-   to_log ( "making socket reusable", LL_DEBUG, SOCKET_OP_LOG_LEVEL );
+   DEBUG_MSG ( "making socket reusable \n");
   
   int reuse_val = 1;
   if ( setsockopt ( sock, SOL_SOCKET, SO_REUSEADDR, &reuse_val, sizeof ( reuse_val ) ) == -1 ) {
 
-    to_log ( "reuse problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    DEBUG_MSG ( "reuse problem\n");
     return 1;
   }
   
@@ -26,18 +26,18 @@ int make_reusable ( int sock ) {
 
 int bind_socket ( uint32_t listn_ip, uint16_t port, int listn_backlog ) {
 
-  to_log ( "binding socket", LL_DEBUG, SOCKET_OP_LOG_LEVEL );
+  DEBUG_MSG ( "binding socket\n");
 
   int sock = socket ( PF_INET, SOCK_STREAM, 0 );
   if ( -1 == sock ) {    
 
-    to_log ( "socket problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    DEBUG_MSG ( "socket problem\n");
     return -1;
   }
 
   if ( 0 != make_reusable ( sock ) ){
     
-    to_log ( "make reuse problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    DEBUG_MSG ( "make reuse problem\n");
     return -1;
   }
   
@@ -49,31 +49,31 @@ int bind_socket ( uint32_t listn_ip, uint16_t port, int listn_backlog ) {
 
   if ( -1 == bind ( sock, (struct sockaddr *) &serv_addr, sizeof( struct sockaddr_in) ) ) {
 
-    to_log ( "bind problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    DEBUG_MSG ( "bind problem\n");
     return -1;
   }
 
   if ( -1 == listen ( sock, listn_backlog ) ) {
     
-    to_log ( "listen problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    DEBUG_MSG ( "listen problem\n");
     return -1;
   }
 
-  to_log ( "bind success", LL_DEBUG, SOCKET_OP_LOG_LEVEL );
+  DEBUG_MSG ( "bind success\n");
 
   return sock;
 }
 
 int connect_to_server ( uint32_t server_ip, uint16_t port ) {
 
-  to_log ( "connecting to server", LL_INFO, SOCKET_OP_LOG_LEVEL );
+  DEBUG_MSG ( "connecting to server\n");
 
   struct sockaddr_in serv_addr;
   int sock = socket ( PF_INET, SOCK_STREAM, 0 );
   
   if ( -1 == sock ) {    
 
-    to_log ( "socket problem", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    DEBUG_MSG ( "socket problem\n");
     return -1;
   }
 
@@ -84,11 +84,11 @@ int connect_to_server ( uint32_t server_ip, uint16_t port ) {
 
   if ( connect ( sock, (struct sockaddr *) &serv_addr, sizeof(struct sockaddr_in) ) == -1 ) {
 
-    to_log ( "connection to server failed", LL_ERROR, SOCKET_OP_LOG_LEVEL );
+    DEBUG_MSG ( "connection to server failed\n");
     return -1;
   }   
 
-  to_log ( "connected successfully", LL_INFO, SOCKET_OP_LOG_LEVEL );
+  DEBUG_MSG ( "connected successfully\n");
   
   return sock;
 }
@@ -96,7 +96,7 @@ int connect_to_server ( uint32_t server_ip, uint16_t port ) {
 int accept_wrap ( int sock ) {
 
   // ???
-  to_log ( "accepting", LL_DEBUG, SOCKET_OP_LOG_LEVEL );
+  DEBUG_MSG ( "accepting\n");
 
   static struct sockaddr_in clnt_addr;
   static socklen_t sock_len;

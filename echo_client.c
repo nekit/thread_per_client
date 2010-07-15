@@ -4,7 +4,7 @@
 #include "structures.h"
 #include "parse_args.h"
 #include "client.h"
-#include "logging.h"
+#include "mega_log.h"
 #include "mega_log.h"
 
 int main ( int argc, char * argv[] ) {
@@ -24,7 +24,7 @@ int main ( int argc, char * argv[] ) {
   if ( CM_CLIENT == rm.client_run_mode )
     if ( 0 != run_client ( rm ) ) {
 
-      to_log ( "client error", LL_ERROR, rm.log_level );
+      DEBUG_MSG ( "client error\n");
       return (EXIT_FAILURE);
     }
   
