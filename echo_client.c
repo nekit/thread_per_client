@@ -18,7 +18,6 @@ int main ( int argc, char * argv[] ) {
   }
 
 
-
   if ( CM_CLIENT == rm.client_run_mode )
     if ( 0 != run_client ( rm ) ) {
 

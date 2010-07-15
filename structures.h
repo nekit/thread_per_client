@@ -51,7 +51,7 @@ typedef struct run_mode_s {
 
 typedef struct statistic_s {
 
-  uint64_t counter;
+  long long counter;
   pthread_mutex_t mutex;
   
 } statistic_t;
@@ -63,6 +63,13 @@ typedef struct client_task_s {
   char ip_addr[ IP_ADDRES_SIZE ];
   statistic_t statistic;
     
-} client_task_t; 
+} client_task_t;
+
+typedef struct statistic_task_s {
+
+  statistic_t * statistic_p;
+  int reporting_timeout;
+  
+} statistic_task_t;
 
 #endif
