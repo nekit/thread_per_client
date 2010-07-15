@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 inline void idx_to_packet ( uint32_t idx, packet_t * p ) {
-
+  
   memcpy ( p, &idx, sizeof ( idx ) );
 }
 
@@ -18,7 +18,7 @@ inline int value_of_packet ( packet_t * p ) {
 
   uint32_t val = -1;
   memcpy ( &val, p, sizeof ( val ) );
-  return 0;
+  return val;
 }
 
 void init_sleep_time ( struct timespec * t,  int freq ) {
@@ -38,26 +38,29 @@ inline int update_statistic ( statistic_t * stat ) {
 }
 
 
-int recv_wrap ( int sock, packet_t * pack  ) {
+int recv_wrap ( int sock, packet_t * pack_p  ) {
 
   TRACE_MSG ( "recieving packet on sock %d\n", sock );
-  
+
   int rcv_len = 0;
   int len;
 
-  while ( rcv_len != sizeof ( pack ) ) {
+  while ( rcv_len != sizeof ( *pack_p ) ) {
 
-    len = recv ( sock, pack + rcv_len, sizeof ( pack ) - rcv_len, 0 );
+    len = recv ( sock, pack_p + rcv_len, sizeof ( *pack_p ) - rcv_len, 0 );
+
+    TRACE_MSG( "recieved temproary len = %d\n", len );
+    
     if ( len <= 0 ) {
 
       ERROR_MSG("recieve failed on sock %d\n", sock );
       return -1;
     }
 
-    rcv_len += len;    
+    rcv_len += len;
   }
 
-  TRACE_MSG ( "packet recived on sock %d len %d ", sock, rcv_len );
+  TRACE_MSG ( "packet recived on sock %d len %d\n", sock, rcv_len );
 
   return rcv_len;
 }
@@ -73,11 +76,9 @@ void * client ( void * arg ) {
 
   if ( -1 == sock )
     return NULL;
-
   
-   uint32_t send_idx = 28;
-       printf ( "send before to pack: %d\n", send_idx  );
-
+  uint32_t send_idx = 15;
+  TRACE_MSG ( "initial send_idx: %d\n", send_idx );
   uint32_t recv_idx;
   packet_t pack;
   int len;
@@ -89,10 +90,14 @@ void * client ( void * arg ) {
   for ( ; ; ) {
 
     idx_to_packet ( send_idx, &pack );
+
+    TRACE_MSG( "sending idx %d on sock %d\n", send_idx, sock );
     
     len = send ( sock, &pack, sizeof ( pack ), 0 );
     if ( -1 == len )
       break;
+
+    TRACE_MSG( "idx %d sent on sock %d\n", send_idx, sock );
 
     nanosleep ( &sleep_time, &remaning_sleep_time );
    
@@ -109,7 +114,7 @@ void * client ( void * arg ) {
 
     if ( recv_idx != send_idx ) {
 
-      ERROR_MSG ( "recv_idx != send_idx\n send_idx: %d\n recv_idx: %d\n" );     
+      ERROR_MSG ( "recv_idx != send_idx\n send_idx: %d\n recv_idx: %d\n", send_idx, recv_idx );     
       break;
     }
 
