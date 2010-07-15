@@ -4,6 +4,7 @@
 #include <memory.h>
 #include "logging.h"
 #include "client_threads.h"
+#include "mega_log.h"
 
 int make_client_task ( run_mode_t * rm, client_task_t * ct ) {
 
@@ -25,7 +26,7 @@ int make_client_task ( run_mode_t * rm, client_task_t * ct ) {
 
 int run_client ( run_mode_t run_mode ) {
 
-  to_log ( "client start", LL_INFO, run_mode.log_level );
+  INFO_MSG ( "Client starting %d\n", 1 );
 
   pthread_t thread[run_mode.thread_amount];
   client_task_t client_task;

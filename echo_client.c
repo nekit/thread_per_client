@@ -5,6 +5,7 @@
 #include "parse_args.h"
 #include "client.h"
 #include "logging.h"
+#include "mega_log.h"
 
 int main ( int argc, char * argv[] ) {
 
@@ -15,6 +16,8 @@ int main ( int argc, char * argv[] ) {
     printf("parse argument exception");
     return (EXIT_FAILURE);
   }
+
+  INFO_MSG ( "This is all right\n" );
 
   if ( CM_CLIENT == rm.client_run_mode )
     if ( 0 != run_client ( rm ) ) {
