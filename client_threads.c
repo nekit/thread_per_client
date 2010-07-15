@@ -1,6 +1,8 @@
 #include "client_threads.h"
 #include "structures.h"
 #include "socket_operations.h"
+#include "mega_log.h"
+
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <memory.h>
@@ -36,13 +38,33 @@ inline int update_statistic ( statistic_t * stat ) {
 }
 
 
-// Какие то проблемы с if ( recv_idx != send_idx )
+int recv_wrap ( int sock, packet_t * pack  ) {
+
+  TRACE_MSG ( "recieving packet on sock %d\n", sock );
+  
+  int rcv_len = 0;
+  int len;
+
+  while ( rcv_len != sizeof ( pack ) ) {
+
+    len = recv ( sock, pack + rcv_len, sizeof ( pack ) - rcv_len, 0 );
+    if ( len <= 0 ) {
+
+      ERROR_MSG("recieve failed on sock %d\n", sock );
+      return -1;
+    }
+
+    rcv_len += len;    
+  }
+
+  TRACE_MSG ( "packet recived on sock %d len %d ", sock, rcv_len );
+
+  return rcv_len;
+}
 
 void * client ( void * arg ) {
 
-  client_task_t * task = arg;
-
-  to_log ( "thread started", LL_DEBUG, task -> log_level );
+  client_task_t * task = arg;  
   
   int sock = connect_to_server ( inet_addr ( task -> ip_addr ), htons ( task -> port ) );
 
@@ -74,21 +96,25 @@ void * client ( void * arg ) {
 
     nanosleep ( &sleep_time, &remaning_sleep_time );
 
-    len = recv ( sock, &pack, sizeof ( pack ), 0 );
-    if ( 0 == len )
-      break;
 
+    // ------------------- recv_wrap
+
+    len = recv_wrap ( sock, &pack );
+    if ( len <= 0 ) {
+
+      ERROR_MSG ( "recieved failed on sock %d\n", sock );      
+      break;
+    }
+    
     recv_idx = value_of_packet ( &pack );
 
-    printf ( "recv: %d\n", recv_idx);
+    DEBUG_MSG ( "sock %d recv_idx %d\n", sock, recv_idx );
 
     if ( recv_idx != send_idx ) {
 
-      to_log ( "ERROR!!! recv_idx != send_idx", LL_ERROR, task -> log_level );
+      ERROR_MSG ( "recv_idx != send_idx\n send_idx: %d\n recv_idx: %d\n" );     
       break;
     }
-
-    to_log ( "packet recieved", LL_DEBUG, task -> log_level );
 
     send_idx += 1;
     update_statistic ( &task -> statistic );
