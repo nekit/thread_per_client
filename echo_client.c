@@ -17,6 +17,8 @@ int main ( int argc, char * argv[] ) {
     return (EXIT_FAILURE);
   }
 
+  INIT_LOG_LEVEL ("Debug");
+
   INFO_MSG ( "This is all right\n" );
 
   if ( CM_CLIENT == rm.client_run_mode )
