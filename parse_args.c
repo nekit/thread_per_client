@@ -19,7 +19,6 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
   rm -> reporting_timeout = default_reporting_timeout;
   strcpy(rm -> ip_addr , default_ip);
   rm -> port = default_port;
-  rm -> log_level = default_log_level;
   
   int res = 0;
   
@@ -33,7 +32,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
 	    break;
       if (i >= sizeof (rm_names) / sizeof (rm_names[0]))
 	rm -> client_run_mode = CM_CLIENT;
-      to_log (" parse mode done ", LL_DEBUG, rm -> log_level);
+      DEBUG_MSG (" parse mode done ");
       break;
     }
     case 'f': {
@@ -43,7 +42,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
 	printf("wrong frequency \n");
 	return  1;
       }
-      to_log (" parse frequency done ", LL_DEBUG, rm -> log_level);
+      DEBUG_MSG (" parse frequency done \n");
       break;
     }
     case 'n':{
@@ -55,7 +54,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
 	printf("wrong thread amount \n");
 	return  1;
       }
-      to_log (" parse thread amount done ", LL_DEBUG, rm -> log_level);
+      DEBUG_MSG (" parse thread amount done \n");
       break;
     }
     case 't':{
@@ -81,7 +80,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
 	printf("wrong port \n");
 	return 1;
       }
-      to_log (" parse ip done ", LL_DEBUG, rm -> log_level);
+      DEBUG_MSG (" parse ip done" );
       break;
     }
     case 'h':{

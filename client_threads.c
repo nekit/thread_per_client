@@ -67,6 +67,7 @@ void * client ( void * arg ) {
   client_task_t * task = arg;
 
   DEBUG_MSG("connecting to %s port %d\n", task -> ip_addr, task -> port );
+  DEBUG_MSG ( "thread start \n" );
   
   int sock = connect_to_server ( inet_addr ( task -> ip_addr ), htons ( task -> port ) );
 
@@ -88,9 +89,6 @@ void * client ( void * arg ) {
   for ( ; ; ) {
 
     idx_to_packet ( send_idx, &pack );
-
-    to_log ( "send packet", LL_DEBUG, task -> log_level );
-    printf ( "send: %d\n", send_idx  );
     
     len = send ( sock, &pack, sizeof ( pack ), 0 );
     if ( -1 == len )

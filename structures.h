@@ -3,11 +3,11 @@
 
 #include <stdint.h>
 #include <pthread.h>
-#include "logging.h"
+#include "mega_log.h"
 
 #define default_ip  "127.0.0.1"
-#define default_port 8080
-#define default_thread_amount 10
+#define default_port 1025
+#define default_thread_amount 2
 #define default_reporting_timeout 100
 #define defualt_client_run_mode CM_CLIENT
 #define default_frequency 100
@@ -62,8 +62,7 @@ typedef struct client_task_s {
   int port;
   char ip_addr[ IP_ADDRES_SIZE ];
   statistic_t statistic;
-  int log_level;
-  
+    
 } client_task_t; 
 
 #endif
