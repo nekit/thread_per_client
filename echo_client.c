@@ -6,6 +6,7 @@
 #include "client.h"
 #include "mega_log.h"
 #include "mega_log.h"
+#include "run_flood_client.h"
 
 int main ( int argc, char * argv[] ) {
 
@@ -22,6 +23,13 @@ int main ( int argc, char * argv[] ) {
     if ( 0 != run_client ( rm ) ) {
 
       DEBUG_MSG ( "client error\n");
+      return (EXIT_FAILURE);
+    }
+
+  if ( CM_FLOOD_CLIENT == rm.client_run_mode )
+    if ( 0 != flood_client ( rm ) ) {
+
+      DEBUG_MSG ( "flood client error\n");
       return (EXIT_FAILURE);
     }
   

@@ -25,13 +25,17 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
   while ( (res = getopt(argc,argv,"m:f:n:t:s:p:h:L:")) != -1) {
     switch (res){
     case 'm': {
+
+      TRACE_MSG ( "optarg: %s\n", optarg );
+      TRACE_MSG ( "rm_n[1]: %s\n", rm_names[1] );
+      
       int i;
       for (i = 0; i < sizeof (rm_names) / sizeof (rm_names[0]); ++i)
 	if (rm_names[i] != 0)
 	  if (strcasecmp (optarg, rm_names[i]))
 	    break;
       if (i >= sizeof (rm_names) / sizeof (rm_names[0]))
-	rm -> client_run_mode = CM_CLIENT;
+	rm -> client_run_mode = i;
       DEBUG_MSG (" parse mode done ");
       break;
     }

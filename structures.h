@@ -9,7 +9,7 @@
 #define default_port 1025
 #define default_thread_amount 2
 #define default_reporting_timeout 100
-#define defualt_client_run_mode CM_CLIENT
+#define defualt_client_run_mode CM_FLOOD_CLIENT
 #define default_frequency 100
 #define default_log_level LL_DEBUG
 
@@ -64,6 +64,13 @@ typedef struct client_task_s {
   statistic_t statistic;
     
 } client_task_t;
+
+typedef struct recv_flood_task_s {
+
+  int sock;
+  statistic_t * statistic_p;
+  
+} recv_flood_task_t;
 
 typedef struct statistic_task_s {
 
