@@ -6,6 +6,7 @@ typedef enum {
   LL_DEBUG,
   LL_INFO,
   LL_RELEASE,
+  LL_ERROR,
   LL_LAST,
   
 } log_level_t;

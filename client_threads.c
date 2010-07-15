@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 #include <memory.h>
 #include <time.h>
+#include <stdio.h>
 
 inline void idx_to_packet ( uint32_t idx, packet_t * p ) {
 
@@ -35,12 +36,23 @@ inline int update_statistic ( statistic_t * stat ) {
 }
 
 
+// Какие то проблемы с if ( recv_idx != send_idx )
+
 void * client ( void * arg ) {
 
   client_task_t * task = arg;
+
+  to_log ( "thread started", LL_DEBUG, task -> log_level );
+  
   int sock = connect_to_server ( inet_addr ( task -> ip_addr ), htons ( task -> port ) );
 
-  uint32_t send_idx = 0;
+  if ( -1 == sock )
+    return NULL;
+
+  
+   uint32_t send_idx = 28;
+       printf ( "send before to pack: %d\n", send_idx  );
+
   uint32_t recv_idx;
   packet_t pack;
   int len;
@@ -52,6 +64,10 @@ void * client ( void * arg ) {
   for ( ; ; ) {
 
     idx_to_packet ( send_idx, &pack );
+
+    to_log ( "send packet", LL_DEBUG, task -> log_level );
+    printf ( "send: %d\n", send_idx  );
+    
     len = send ( sock, &pack, sizeof ( pack ), 0 );
     if ( -1 == len )
       break;
@@ -64,8 +80,15 @@ void * client ( void * arg ) {
 
     recv_idx = value_of_packet ( &pack );
 
-    if ( recv_idx != send_idx )
+    printf ( "recv: %d\n", recv_idx);
+
+    if ( recv_idx != send_idx ) {
+
+      to_log ( "ERROR!!! recv_idx != send_idx", LL_ERROR, task -> log_level );
       break;
+    }
+
+    to_log ( "packet recieved", LL_DEBUG, task -> log_level );
 
     send_idx += 1;
     update_statistic ( &task -> statistic );
