@@ -1,4 +1,5 @@
 #include <pthread.h>
+#include <stdio.h>
 #include "run_flood_client.h"
 #include "structures.h"
 #include "flood_client.h"
@@ -26,7 +27,7 @@ int make_flood_task ( run_mode_t * rm, client_task_t * ct ) {
 
 int flood_client ( run_mode_t rm ) {
 
-  INFO_MSG( "flood client started\n" );
+  INFO_MSG ( "flood client started\n" );
   
   int i;
   pthread_t send_thread[rm.thread_amount];

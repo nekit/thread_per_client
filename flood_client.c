@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <memory.h>
 #include <time.h>
 #include <sys/socket.h>
@@ -7,11 +8,9 @@
 #include "socket_operations.h"
 #include "flood_client.h"
 #include "structures.h"
-
 #include "client_threads.h"
 
 void * run_flood_client ( void * arg ) {
-
   client_task_t * task = arg;
   pthread_t recv_thread;
   recv_flood_task_t recv_task;
