@@ -9,6 +9,7 @@
 static char * rm_names[] = {
   [CM_CLIENT] = "client",
   [CM_FLOOD_CLIENT] = "flood_client",
+  [CM_SERVER] = "server",
 };
 
 int parse_args ( int argc, char * argv[], run_mode_t * rm ) {

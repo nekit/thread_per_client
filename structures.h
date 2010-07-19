@@ -6,7 +6,7 @@
 #include "mega_log.h"
 
 #define default_ip  "127.0.0.1"
-#define default_port 1025
+#define default_port 1040
 #define default_thread_amount 2
 #define default_reporting_timeout 100
 #define defualt_client_run_mode CM_FLOOD_CLIENT
@@ -22,6 +22,7 @@ typedef enum {
 
   CM_CLIENT,
   CM_FLOOD_CLIENT,
+  CM_SERVER,
   CM_LAST,
   
 } client_mode_t;

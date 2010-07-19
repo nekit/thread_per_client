@@ -24,19 +24,15 @@ void * get_statistics ( void * args ){
        nanosleep ( &sleep_time, &remaning_sleep_time );
         gettimeofday (&current_time, NULL);
       if (current_time.tv_sec - last_time.tv_sec >= 1){
-	//	printf("-> %d   %d\n",current_time.tv_sec, last_time.tv_sec);
 	break;
       }
     }
     
     pthread_mutex_lock ( &task -> statistic_p -> mutex );
-    printf( "%lld\n", task -> statistic_p -> counter );
+    printf( "statistics: %lld\n", task -> statistic_p -> counter );
     task -> statistic_p -> counter = 0;
     pthread_mutex_unlock ( &task -> statistic_p -> mutex );
     last_time = current_time;
-   
-   
   }
-  
   return NULL;
 }
