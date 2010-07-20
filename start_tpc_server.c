@@ -30,7 +30,7 @@ int  start_server(run_mode_t run_mode){
       int new_sock = accept( sock, NULL, NULL);
       if( -1 == new_sock )
 	ERROR_MSG ( "accepting problem on socket : %d\n", sock );
-      pthread_create ( &consumer[i], NULL, run, &new_sock );
+      pthread_create ( &consumer[i], NULL, run, (void*) new_sock );
       printf ("new connection #%d\n", i);
 	 pfd.revents = 0;
       i++;
