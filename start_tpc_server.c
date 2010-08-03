@@ -12,7 +12,7 @@
 #include "socket_operations.h"
 
 int  start_server(run_mode_t run_mode){
-  printf("Server starts \n");
+  INFO_MSG("Server started \n");
   pthread_t consumer [3000];
   struct pollfd pfd;
   int sock;
