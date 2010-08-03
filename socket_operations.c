@@ -49,13 +49,13 @@ int bind_socket ( uint32_t listn_ip, uint16_t port, int listn_backlog ) {
 
   if ( -1 == bind ( sock, (struct sockaddr *) &serv_addr, sizeof( struct sockaddr_in) ) ) {
 
-    DEBUG_MSG ( "bind problem\n");
+    ERROR_MSG ( "bind problem\n");
     return -1;
   }
 
   if ( -1 == listen ( sock, listn_backlog ) ) {
     
-    DEBUG_MSG ( "listen problem\n");
+    ERROR_MSG ( "listen problem\n");
     return -1;
   }
 
@@ -84,7 +84,7 @@ int connect_to_server ( uint32_t server_ip, uint16_t port ) {
 
   if ( connect ( sock, (struct sockaddr *) &serv_addr, sizeof(struct sockaddr_in) ) == -1 ) {
 
-    DEBUG_MSG ( "connection to server failed\n");
+    ERROR_MSG ( "connection to server failed\n");
     return -1;
   }   
 

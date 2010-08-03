@@ -35,15 +35,11 @@ void * run_flood_client ( void * arg ) {
 
   for ( ; ; ) {
   
-    //printf ( "1\n" );
-  
     if ( -1 == send ( sock, &flood_packet, sizeof ( flood_packet ), 0) ) {
       ERROR_MSG( "send failed\n" );
       break;
     } else
       DEBUG_MSG ( "packet sent\n" );
-      
-      //printf ( "2\n" );
     }
      
      
