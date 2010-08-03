@@ -32,7 +32,8 @@ void log_message ( const char * file, const char * function, int line, mlog_leve
 
     pthread_mutex_lock ( &mutex );
 
-    fprintf ( stderr,  "[%d] <%s> thread %u file '%s' function '%s' line %d:\n", idx++, mll_level_str, (int)pthread_self (), file, function, line );
+    // stdout
+    fprintf ( stdout,  "[%d] <%s> thread %u file '%s' function '%s' line %d:\n", idx++, mll_level_str, (int)pthread_self (), file, function, line );
 
     va_start (args, template);
     vfprintf (stderr, template, args);

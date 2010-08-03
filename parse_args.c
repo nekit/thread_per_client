@@ -26,8 +26,6 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
   while ( (res = getopt(argc,argv,"m:f:n:t:s:p:h:L:")) != -1) {
     switch (res){
     case 'm': {
-      TRACE_MSG ( "optarg: %s\n", optarg );
-      TRACE_MSG ( "rm_n[1]: %s\n", rm_names[1] );
       int i;
       for (i = 0; i < sizeof (rm_names) / sizeof (rm_names[0]); ++i){
 	if (rm_names[i] != 0)
@@ -46,7 +44,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
       if (0 <= atoi(optarg))
 	rm -> frequency = atoi(optarg);
       else{
-	printf("wrong frequency \n");
+	ERROR_MSG("wrong frequency \n");
 	return  1;
       }
       DEBUG_MSG (" parse frequency done \n");
@@ -58,7 +56,7 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
 	//	printf("%d \n", rm -> thread_amount);
       }
       else{
-	printf("wrong thread amount \n");
+	ERROR_MSG("wrong thread amount \n");
 	return  1;
       }
       DEBUG_MSG (" parse thread amount done \n");
@@ -77,14 +75,14 @@ int parse_args ( int argc, char * argv[], run_mode_t * rm ) {
     }
     case 's':{
       stpcpy(rm -> ip_addr, optarg);
-      printf("%s \n", rm -> ip_addr);
+      printf("binded to IP-addres %s \n", rm -> ip_addr);
         break;
     }
     case 'p':{
       if (0 < atoi(optarg))
 	rm -> port = atoi(optarg);
       else{
-	printf("wrong port \n");
+	ERROR_MSG("wrong port \n");
 	return 1;
       }
       DEBUG_MSG (" parse ip done" );

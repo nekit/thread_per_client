@@ -2,7 +2,6 @@
 #include "structures.h"
 #include "socket_operations.h"
 #include "mega_log.h"
-
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <memory.h>
@@ -51,7 +50,7 @@ int recv_wrap ( int sock, packet_t * pack_p  ) {
 
     TRACE_MSG( "recieved temproary len = %d\n", len );
     
-    if ( len <= 0 ) {
+    if ( len < 0 ) {
 
       ERROR_MSG("recieve failed on sock %d\n", sock );
       return -1;
@@ -74,10 +73,14 @@ void * client ( void * arg ) {
   
   int sock = connect_to_server ( inet_addr ( task -> ip_addr ), htons ( task -> port ) );
 
-  if ( -1 == sock )
+  if ( -1 == sock ) {
+
+    ERROR_MSG ( "connection to server failed\n" );
     return NULL;
+  }
+
   
-  uint32_t send_idx = 15;
+  uint32_t send_idx = 1;
   TRACE_MSG ( "initial send_idx: %d\n", send_idx );
   uint32_t recv_idx;
   packet_t pack;
@@ -88,6 +91,8 @@ void * client ( void * arg ) {
   init_sleep_time ( &sleep_time, task -> frequency );
 
   for ( ; ; ) {
+
+    TRACE_MSG ( "working\n" );
 
     idx_to_packet ( send_idx, &pack );
 
@@ -102,9 +107,10 @@ void * client ( void * arg ) {
     nanosleep ( &sleep_time, &remaning_sleep_time );
    
     len = recv_wrap ( sock, &pack );
-    if ( len <= 0 ) {
+    if ( len < 0 ) {
 
-      ERROR_MSG ( "recieved failed on sock %d\n", sock );      
+      ERROR_MSG ( "recieved failed on sock %d\n  idx = %d\n", sock, send_idx );
+      perror ("!!!!");
       break;
     }
     
@@ -121,6 +127,8 @@ void * client ( void * arg ) {
     send_idx += 1;
     update_statistic ( &task -> statistic );
   }
+
+  INFO_MSG ( "client off\n" );
 
   return NULL;
 }

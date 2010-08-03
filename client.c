@@ -6,6 +6,7 @@
 #include "client_threads.h"
 #include "mega_log.h"
 #include "thread_statistics.h"
+#include <unistd.h>
 
 int make_client_task ( run_mode_t * rm, client_task_t * ct ) {
 
@@ -45,17 +46,20 @@ int run_client ( run_mode_t run_mode ) {
   pthread_create ( &statistic_thread, NULL, get_statistics, (void *) &statistic_task );
 
   int i;
-  for ( i = 0; i < run_mode.thread_amount; ++i )
+  for ( i = 0; i < run_mode.thread_amount; ++i ) {
+    sleep ( 0 );
     if ( 0 != pthread_create( &thread[i], NULL, client, (void *) &client_task ) ) {
 
       DEBUG_MSG ( "thread create problem\n");
       return 1;
     }
+  }
 
   for ( i = 0; i < run_mode.thread_amount; ++i )
     pthread_join ( thread[i], NULL );
 
   pthread_join ( statistic_thread, NULL );
+ 
 
   DEBUG_MSG ( "client finish\n" );
 

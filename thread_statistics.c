@@ -1,5 +1,6 @@
 #include <pthread.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include <inttypes.h>
 #include "thread_statistics.h"
@@ -14,12 +15,13 @@ void * get_statistics ( void * args ){
   struct timespec remaning_sleep_time;
   struct timeval last_time;
   struct timeval current_time;
+  int cnt = 20;
+  
   sleep_time.tv_sec = task -> reporting_timeout / 10000;
   sleep_time.tv_nsec = (int)1E6 * (task -> reporting_timeout % 1000);  
   gettimeofday (&last_time, NULL);
   
   for ( ;; ) {
-   
     for( ;;){
        nanosleep ( &sleep_time, &remaning_sleep_time );
         gettimeofday (&current_time, NULL);
@@ -29,7 +31,17 @@ void * get_statistics ( void * args ){
     }
     
     pthread_mutex_lock ( &task -> statistic_p -> mutex );
-    printf( "statistics: %lld\n", task -> statistic_p -> counter );
+    printf( "%lld\n", task -> statistic_p -> counter );
+
+    if ( 0 == task -> statistic_p -> counter ) {
+      
+      if ( 0 == --cnt ) {
+	printf ( "statistics 0 !!!\n" );
+	exit ( EXIT_FAILURE );
+      }
+    }else
+      cnt = 20;
+    
     task -> statistic_p -> counter = 0;
     pthread_mutex_unlock ( &task -> statistic_p -> mutex );
     last_time = current_time;

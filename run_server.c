@@ -14,7 +14,6 @@ void * run(void * args){
   TRACE_MSG ("run tpc server \n");
   int length;
   int  sock =  args;
-    
   packet_t pack;
   while (1) {
     length = recv_wrap ( sock , &pack );

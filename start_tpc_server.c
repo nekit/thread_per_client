@@ -12,12 +12,12 @@
 #include "socket_operations.h"
 
 int  start_server(run_mode_t run_mode){
-
-  pthread_t consumer [1000];
+  printf("Server starts \n");
+  pthread_t consumer [3000];
   struct pollfd pfd;
   int sock;
   signal (SIGPIPE,SIG_IGN);
-  sock = bind_socket(inet_addr( run_mode.ip_addr), htons (run_mode.port), 50);
+  sock = bind_socket(inet_addr( run_mode.ip_addr), htons (run_mode.port), 5000);
   
   pfd.fd = sock;
   pfd.events = ( 0 | POLLIN );
@@ -35,7 +35,6 @@ int  start_server(run_mode_t run_mode){
 	 pfd.revents = 0;
       i++;
       }
-    
   }
   shutdown ( sock, SHUT_RDWR );
   return 0;
