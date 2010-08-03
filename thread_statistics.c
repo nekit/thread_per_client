@@ -18,7 +18,7 @@ void * get_statistics ( void * args ){
   sleep_time.tv_sec = task -> reporting_timeout / 10000;
   sleep_time.tv_nsec = (int)1E6 * (task -> reporting_timeout % 1000);  
   gettimeofday (&last_time, NULL);
-  
+  int control = 5;
   for ( ;; ) {
     for( ;;){
        nanosleep ( &sleep_time, &remaning_sleep_time );
@@ -32,9 +32,13 @@ void * get_statistics ( void * args ){
     printf( "%lld\n", task -> statistic_p -> counter );
 
     if ( 0 == task -> statistic_p -> counter ) {
+      if (0 == --control){
         ERROR_MSG ( "connection lost \n program exit\n" );
 	exit ( EXIT_FAILURE );
+      }
     }
+    else
+      control = 5;
     
     task -> statistic_p -> counter = 0;
     pthread_mutex_unlock ( &task -> statistic_p -> mutex );
