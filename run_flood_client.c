@@ -1,5 +1,6 @@
 #include <pthread.h>
 #include <stdio.h>
+#include <semaphore.h>
 #include "run_flood_client.h"
 #include "structures.h"
 #include "flood_client.h"
@@ -33,6 +34,7 @@ int flood_client ( run_mode_t rm ) {
   struct timespec remaning;
   pause.tv_sec = 0;
   pause.tv_nsec = (int) 1E6;
+  sem_init( &flood_task.semaphore, 0, 0);
   
   make_flood_task ( &rm, &flood_task );
   statistic_task.reporting_timeout = rm.reporting_timeout;
@@ -48,6 +50,7 @@ int flood_client ( run_mode_t rm ) {
     }
     
   }
+  sem_post( &flood_task.semaphore );
   for (i = 0; i < rm.thread_amount; ++i )
     pthread_join ( send_thread[i], NULL );
 

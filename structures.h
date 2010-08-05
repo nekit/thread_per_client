@@ -2,6 +2,7 @@
 #define STRUCTURES_H
 
 #include <stdint.h>
+#include <semaphore.h>
 #include <pthread.h>
 #include "mega_log.h"
 
@@ -63,6 +64,7 @@ typedef struct client_task_s {
   int port;
   char ip_addr[ IP_ADDRES_SIZE ];
   statistic_t statistic;
+  sem_t semaphore;
     
 } client_task_t;
 

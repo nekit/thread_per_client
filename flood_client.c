@@ -4,6 +4,7 @@
 #include <time.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <semaphore.h>
 #include <pthread.h>
 #include "socket_operations.h"
 #include "flood_client.h"
@@ -14,6 +15,8 @@ void * run_flood_client ( void * arg ) {
   client_task_t * task = arg;
   pthread_t recv_thread;
   recv_flood_task_t recv_task;
+  sem_wait( &task -> semaphore);
+  sem_post( &task -> semaphore);
 
   
   DEBUG_MSG("connecting to %s port %d\n", task -> ip_addr, task -> port );

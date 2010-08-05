@@ -29,7 +29,7 @@ void * get_statistics ( void * args ){
     }
     
     pthread_mutex_lock ( &task -> statistic_p -> mutex );
-    printf( "%lld\n", task -> statistic_p -> counter );
+    printf( "statistics: %lld tpc\n", task -> statistic_p -> counter );
 
     if ( 0 == task -> statistic_p -> counter ) {
       if (0 == --control){
