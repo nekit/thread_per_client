@@ -6,6 +6,7 @@
 #include "client_threads.h"
 #include "mega_log.h"
 #include "thread_statistics.h"
+#include "statistic.h"
 #include <unistd.h>
 
 int make_client_task ( run_mode_t * rm, client_task_t * ct ) {
@@ -43,7 +44,7 @@ int run_client ( run_mode_t run_mode ) {
   statistic_task.reporting_timeout = run_mode.reporting_timeout;
   statistic_task.statistic_p = &client_task.statistic;
 
-  pthread_create ( &statistic_thread, NULL, get_statistics, (void *) &statistic_task );
+  pthread_create ( &statistic_thread, NULL, statistics, (void *) &statistic_task );
 
   int i;
   for ( i = 0; i < run_mode.thread_amount; ++i ) {

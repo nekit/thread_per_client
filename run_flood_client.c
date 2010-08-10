@@ -7,6 +7,7 @@
 #include "mega_log.h"
 #include "thread_statistics.h"
 #include <memory.h>
+#include "statistic.h"
 #include <unistd.h>
 #include <sys/time.h>
 
@@ -39,7 +40,8 @@ int flood_client ( run_mode_t rm ) {
   make_flood_task ( &rm, &flood_task );
   statistic_task.reporting_timeout = rm.reporting_timeout;
   statistic_task.statistic_p = &flood_task.statistic;
-  pthread_create ( &statistic_thread, NULL, get_statistics,  (void *) &statistic_task );
+  //pthread_create ( &statistic_thread, NULL, get_statistics,  (void *) &statistic_task );
+  pthread_create ( &statistic_thread, NULL, statistics,  (void *) &statistic_task );
 
   for ( i = 0; i < rm.thread_amount; ++i ){
     nanosleep ( &pause, &remaning );
