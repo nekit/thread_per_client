@@ -31,11 +31,13 @@ int  start_server(run_mode_t run_mode){
       if( -1 == new_sock )
 	ERROR_MSG ( "accepting problem on socket : %d\n", sock );
       if (-1 == pthread_create ( &consumer[i], NULL, run, (void*) new_sock )){
-	printf(" thread creating problem \n");
+	ERROR_MSG (" thread creating problem \n");
 	perror("thread problen \n");
+	fflush(stdout);
 	return 1;
       }
       printf("new connection #%d\n", i);
+      fflush(stdout);
 	 pfd.revents = 0;
       i++;
       }
