@@ -30,7 +30,7 @@ void * get_statistics ( void * args ){
     
     pthread_mutex_lock ( &task -> statistic_p -> mutex );
     printf( "statistics: %lld tpc\n", task -> statistic_p -> counter );
-
+    fflush(stdout);
     if ( 0 == task -> statistic_p -> counter ) {
       if (0 == --control){
         ERROR_MSG ( "connection lost \n program exit\n" );

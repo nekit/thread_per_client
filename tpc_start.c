@@ -11,7 +11,7 @@
 
 int main ( int argc, char * argv[] ) {
 
-  //  signal ( SIGPIPE, SIG_IGN );
+   signal ( SIGPIPE, SIG_IGN );
   INIT_LOG_LEVEL ("INFO");
   run_mode_t rm;  
   if ( 0 != parse_args ( argc, argv, &rm ) ) {
