@@ -21,6 +21,8 @@ void * statistics(void* arg){
     gettimeofday(&time2, NULL);
     double time = diff_time (&time2, &time1);
     printf("statistics: %0.lf tps \n", (client -> statistic_p -> counter / time )  );
+    fflush(stdout);
+    
     if (0 == client -> statistic_p -> counter)
       if (0 == --count)
 	return -1;
